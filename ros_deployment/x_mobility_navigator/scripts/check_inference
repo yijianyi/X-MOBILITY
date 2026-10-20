@@ -1,0 +1,50 @@
+#!/usr/bin/env python2
+"""Check the Python 2 -> Python 3 inference link without sending ROS commands."""
+
+from __future__ import print_function
+
+import argparse
+
+import numpy as np
+
+from x_mobility_navigator.inference_client import InferenceClient
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--socket', default='/tmp/x-mobility/inference.sock')
+    parser.add_argument('--width', type=int, default=1920)
+    parser.add_argument('--height', type=int, default=1200)
+    args = parser.parse_args()
+    if args.width <= 0 or args.height <= 0:
+        parser.error('Image dimensions must be positive')
+    route = np.zeros((19, 4), dtype=np.float32)
+    route[:, 0] = np.arange(19)
+    route[:, 2] = np.arange(19) + 1
+    client = InferenceClient(args.socket, timeout=30.0)
+    try:
+        outputs = client.infer({
+            'image': np.zeros((3, args.height, args.width), dtype=np.float32),
+            'route': route,
+            'speed': np.zeros(1, dtype=np.float32),
+            'action_input': np.zeros(6, dtype=np.float32),
+            'history_input': np.zeros((1, 1024), dtype=np.float32),
+            'sample_input': np.zeros((1, 512), dtype=np.float32),
+        })
+        expected = {'action_output': 6, 'path_output': 10,
+                    'history_output': 1024, 'sample_output': 512}
+        if set(outputs) != set(expected):
+            raise ValueError('Unexpected output names')
+        for name, size in sorted(expected.items()):
+            value = outputs[name]
+            if value.size != size or not np.all(np.isfinite(value)):
+                raise ValueError('Invalid output: ' + name)
+            print('%s: shape=%s, dtype=%s, finite=True' %
+                  (name, value.shape, value.dtype))
+        print('Inference check passed; no ROS velocity commands were published.')
+    finally:
+        client.close()
+
+
+if __name__ == '__main__':
+    main()

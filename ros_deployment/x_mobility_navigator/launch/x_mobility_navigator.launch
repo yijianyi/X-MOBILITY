@@ -1,0 +1,39 @@
+<launch>
+  <arg name="use_sim_time" default="false"/>
+  <arg name="inference_socket" default="/tmp/x-mobility/inference.sock"/>
+  <arg name="inference_timeout" default="5.0"/>
+  <arg name="is_mapless" default="true"/>
+  <arg name="inference_rate" default="5.0"/>
+  <arg name="robot_frame" default="base_link"/>
+  <arg name="launch_rviz" default="true"/>
+  <arg name="image_topic" default="/front_stereo_camera/left/image_raw"/>
+  <arg name="odom_topic" default="/chassis/odom"/>
+  <arg name="cmd_vel_topic" default="/cmd_vel"/>
+  <arg name="route_topic" default="/route"/>
+  <arg name="goal_topic" default="/move_base_simple/goal"/>
+  <arg name="path_topic" default="/x_mobility_path"/>
+
+  <param name="/use_sim_time" value="$(arg use_sim_time)" type="bool"/>
+
+  <node pkg="x_mobility_navigator" type="x_mobility_navigator"
+        name="x_mobility_navigator" output="screen" required="true">
+    <param name="inference_socket" value="$(arg inference_socket)" type="str"/>
+    <param name="inference_timeout" value="$(arg inference_timeout)" type="double"/>
+    <param name="is_mapless" value="$(arg is_mapless)" type="bool"/>
+    <param name="inference_rate" value="$(arg inference_rate)" type="double"/>
+    <param name="robot_frame" value="$(arg robot_frame)" type="str"/>
+    <remap from="/front_stereo_camera/left/image_raw" to="$(arg image_topic)"/>
+    <remap from="/chassis/odom" to="$(arg odom_topic)"/>
+    <remap from="/cmd_vel" to="$(arg cmd_vel_topic)"/>
+    <remap from="/route" to="$(arg route_topic)"/>
+    <remap from="/move_base_simple/goal" to="$(arg goal_topic)"/>
+    <remap from="/x_mobility_path" to="$(arg path_topic)"/>
+  </node>
+
+  <node if="$(arg launch_rviz)" pkg="rviz" type="rviz" name="rviz"
+        args="-d $(find x_mobility_navigator)/rviz/basic_view.rviz" output="screen">
+    <remap from="/front_stereo_camera/left/image_raw" to="$(arg image_topic)"/>
+    <remap from="/move_base_simple/goal" to="$(arg goal_topic)"/>
+    <remap from="/x_mobility_path" to="$(arg path_topic)"/>
+  </node>
+</launch>

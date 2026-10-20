@@ -1,0 +1,9 @@
+FROM nvcr.io/nvidia/tensorrt:23.08-py3
+
+RUN python3 -m pip install --no-cache-dir numpy==1.24.4 pycuda==2024.1.1
+
+COPY ros_deployment/x_mobility_navigator/src /opt/x-mobility/src
+COPY trt_conversion.py /opt/x-mobility/trt_conversion.py
+
+ENV PYTHONPATH=/opt/x-mobility/src
+ENTRYPOINT ["python3", "-m", "x_mobility_navigator.inference_server"]

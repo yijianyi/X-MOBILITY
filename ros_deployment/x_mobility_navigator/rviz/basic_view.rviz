@@ -1,0 +1,93 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+  - Class: rviz/Selection
+    Name: Selection
+  - Class: rviz/Tool Properties
+    Name: Tool Properties
+  - Class: rviz/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/Grid
+      Name: Grid
+      Enabled: true
+      Cell Size: 1
+      Plane Cell Count: 20
+      Color: 160; 160; 164
+      Alpha: 0.5
+      Reference Frame: <Fixed Frame>
+      Line Style:
+        Line Width: 0.03
+        Value: Lines
+    - Class: rviz/TF
+      Name: TF
+      Enabled: true
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Marker Scale: 1
+      Frames:
+        All Enabled: true
+    - Class: rviz/Pose
+      Name: Goal
+      Enabled: true
+      Topic: /move_base_simple/goal
+      Color: 255; 25; 0
+      Shape: Arrow
+      Shaft Length: 1
+      Shaft Radius: 0.05
+      Head Length: 0.3
+      Head Radius: 0.1
+    - Class: rviz/Path
+      Name: Route
+      Enabled: true
+      Topic: /x_mobility_path
+      Color: 25; 255; 0
+      Alpha: 1
+      Buffer Length: 1
+      Line Style: Lines
+      Line Width: 0.03
+      Pose Style: None
+    - Class: rviz/Image
+      Name: Camera
+      Enabled: true
+      Image Topic: /front_stereo_camera/left/image_raw
+      Transport Hint: raw
+      Queue Size: 1
+      Normalize Range: true
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: odom
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Topic: /initialpose
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/PublishPoint
+      Topic: /clicked_point
+      Single click: true
+  Views:
+    Current:
+      Class: rviz/TopDownOrtho
+      Name: Current View
+      Target Frame: <Fixed Frame>
+      Scale: 30
+      Angle: 0
+      X: 0
+      Y: 0
+    Saved: ~
+Window Geometry:
+  Width: 1280
+  Height: 800
+  Hide Left Dock: false
+  Hide Right Dock: false

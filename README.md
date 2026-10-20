@@ -73,9 +73,9 @@ python3 trt_conversion.py -o <onnx_file_path> -t <trt_file_path>
 **Note:** 1) Image size should be adjusted to match the camera resolution in ONNX conversion. 2) TensorRT engines are specific to both the TensorRT version and the GPU on which they are created. Therefore, it's recommended to rebuild the engine outside of docker on the target platform to run inference.
 
 
-6. E2E navigation with ROS2:
+7. E2E navigation with ROS Melodic:
 
-With the TensorRT engine, follow this [instruction](./ros2_deployment/README.md) to setup ROS2, Isaac Sim to run a demo example of X-Mobility.
+Follow the [detailed ROS Melodic deployment instructions](./ros_deployment/README.md) for Ubuntu 18.04 x86_64 and an NVIDIA GPU. The native Python 2.7 ROS node communicates with a separate Python 3 TensorRT inference container over a local Unix socket.
 
 ## License
 X-Mobility is released under the Apache License 2.0. See LICENSE for additional details.
